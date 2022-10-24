@@ -8,11 +8,19 @@ public class BookRepository {
     private static final String SQL_INSERT_AUTHOR = "INSERT INTO author (name) VALUES (?)";
     static final String deleteSQL = "DELETE FROM book WHERE id = ?";
     private static final String SQL_UPDATE = "UPDATE book SET title=? WHERE id=?";
-    static DbUtils connect = new DbUtils();
+    static DbUtils connect;
+
+    static {
+        try {
+            connect = new DbUtils();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void insertBook(String bookName, String genre, String language) {
-        try (Connection conn = connect.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(SQL_INSERT_BOOK)) {
+        try (Connection con =connect.getConnection();
+             PreparedStatement preparedStatement = con.prepareStatement(SQL_INSERT_BOOK)) {
 
             preparedStatement.setString(1, bookName);
             preparedStatement.setString(2, genre);
