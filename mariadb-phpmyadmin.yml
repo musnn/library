@@ -1,0 +1,24 @@
+=version: '3.8'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    ports:
+     - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+  phpmyadmin:
+    depends_on:
+      - mariadb
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+     - '5051:80'
+    environment:
+     - PMA_HOST=mariadb
+     - UPLOAD_LIMIT=1024M
+     - MEMORY_LIMIT=1024M
+     - MAX_EXECUTION_TIME=300
